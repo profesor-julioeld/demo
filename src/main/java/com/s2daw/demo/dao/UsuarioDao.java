@@ -8,4 +8,6 @@ public interface UsuarioDao {
     List<Usuario> getUsuarios();
 
     void eliminarUsuario(Long id);
+
+    void registraUsuario(Usuario usuario);
 }
