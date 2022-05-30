@@ -5,14 +5,14 @@ $(document).ready(function() {
 });
 
 async function cargaUsuarios(){
-  const request = await fetch('api/usuarios', {
+  const response = await fetch('api/usuarios', {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     }
   });
-  const usuarios = await request.json();
+  const usuarios = await response.json();
   let listadoHTML='';
   for (let usuario of usuarios){
     let telefonoTexto=usuario.telefono == null ? '-':usuario.telefono
@@ -34,7 +34,7 @@ async function eliminarUsuario(id){
         return;
     }
     alert(' voy a eliminar el usuario '+id);
-    const request = await fetch('api/eliminar/'+id, {
+    const response = await fetch('api/eliminar/'+id, {
         method: 'DELETE',
         headers: {
         'Accept': 'application/json',

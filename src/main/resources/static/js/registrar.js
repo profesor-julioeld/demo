@@ -15,7 +15,7 @@ async function registraUsuario(){
     alert(' las dos contraseñas no coinciden');
     return;
   }
-  const request = await fetch('api/usuarios', {
+  const response = await fetch('api/usuarios', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
@@ -23,5 +23,6 @@ async function registraUsuario(){
     },
     body:JSON.stringify(datos)
   });
+  alert(' Usuario registrado');
 }
 
