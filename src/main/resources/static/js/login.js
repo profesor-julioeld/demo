@@ -17,7 +17,13 @@ async function iniciarSesion(){
     body:JSON.stringify(datos)
   });
   // No me gusta que devuelva String , cambio a JSON
+  // Mejor solución sería recibir un 401 (fallo autenticación)
+  // y actuar en consecuencia
   const respuesta = await response.json();
-  if (respuesta.success == 'OK') window.location.href='usuarios.html';
+  if (respuesta.success == 'OK') {
+    localStorage.token=respuesta.token;
+    localStorage.email=datos.email;
+    window.location.href='usuarios.html';
+  }
   else alert(' Credenciales erróneas, intente de nuevo');
 }
