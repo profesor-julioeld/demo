@@ -14,7 +14,10 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class Usuario {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    // Version para MariaDB
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name="USUARIO_ID_GENERATOR", sequenceName="SEQ_USUARIO_ID",allocationSize=1)
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="USUARIO_ID_GENERATOR")
     Long id;
     String nombre;
     String apellidos;
