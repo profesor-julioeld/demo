@@ -1,20 +1,25 @@
 // Call the dataTables jQuery plugin
 $(document).ready(function() {
-  cargaUsuarios();
+  let admin=esAdmin(localStorage.token);
+  cargaUsuarios(admin);
   $('#usuarios').DataTable();
-  muestraEmailUsuario();
+  muestraEmailUsuario(admin);
 });
 
-async function cargaUsuarios(){
+async function cargaUsuarios(admin){
   const response = await fetch('api/usuarios', {
     method: 'GET',
     headers: getHeaders()
   });
   const usuarios = await response.json();
   let listadoHTML='';
+  alert(admin);
   for (let usuario of usuarios){
     let telefonoTexto=usuario.telefono == null ? '-':usuario.telefono
-    let botonEliminar ='<a href="#" onclick="eliminarUsuario('+usuario.id+')" class="btn btn-danger btn-circle btn-sm"><i class="fas fa-trash"></i></a>'
+    let botonEliminar=''
+    if (admin) {
+      botonEliminar ='<a href="#" onclick="eliminarUsuario('+usuario.id+')" class="btn btn-danger btn-circle btn-sm"><i class="fas fa-trash"></i></a>'
+    }
     let usuarioHTML= '<tr><td>'+usuario.id+
                      '<td>'+usuario.nombre+
                      '</td><td>'+usuario.email+
@@ -39,14 +44,20 @@ async function eliminarUsuario(id){
     location.reload();
 }
 
-function muestraEmailUsuario(){
+function muestraEmailUsuario(admin){
     document.getElementById("txt-usuario-email").outerHTML=localStorage.email;
+    alert ('muestra usuario'+admin)
+    if (admin) {
+      document.getElementById("txt-usuario-admin").outerHTML=
+      '<button type="button" class="btn btn-danger rounded-pill">Admin</button>';
+    }
 }
 
 // Se accede desde el avatar del usuario y seleccionando logout
 function logout(){
     localStorage.removeItem('token');
     localStorage.removeItem('email');
+    localStorage.removeItem('admin');
     window.location.href='login.html';
 }
 
@@ -58,3 +69,10 @@ function getHeaders(){
         'Authorization':localStorage.token
     };
 }
+
+// Función para parsear el token y obtener el Claim role
+function esAdmin (token) {
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace('-', '+').replace('_', '/');
+    return JSON.parse(window.atob(base64)).role;
+};

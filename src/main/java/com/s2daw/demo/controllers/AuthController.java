@@ -25,8 +25,10 @@ public class AuthController {
         Usuario usuarioLogueado=usuarioDao.obtenerUsuarioPorCredenciales(usuario);
         if (usuarioLogueado!=null){
             // Si password es correcto, creo token y se lo paso
+            // Añado claim role con valor admin si admin es true
             String token=jwtUtil.create(String.valueOf(usuarioLogueado.getId()),
-                                                       usuarioLogueado.getEmail());
+                                                       usuarioLogueado.getEmail(),
+                                                       usuarioLogueado.getAdmin());
             respuesta.put("token",token);
             respuesta.put("success","OK");
         }

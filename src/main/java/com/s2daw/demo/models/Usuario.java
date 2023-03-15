@@ -23,6 +23,12 @@ public class Usuario {
     String apellidos;
     String email;
     String telefono;
+    // Añado si es admin
+    Boolean admin;
+    @PrePersist
+    private void prePresistadmin(){
+        if (admin==null) admin=false;
+    }
     @Column(name="password")
     String password;
     // Aunque Lombok puede generar equals & hashcode, no es recommendable

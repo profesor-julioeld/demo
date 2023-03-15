@@ -46,12 +46,19 @@ public class UsuarioController {
     public void eliminarUsuario(@RequestHeader(value="Authorization") String token,
                                 @PathVariable Long id){
         if (!validarToken(token)) return;
+        if (!soyAdmin(token)) return;
         usuarioDao.eliminarUsuario(id);
+        // Lo suyo es contestar si va todo bien o no
     }
 
     // función de apoyo
     private boolean validarToken(String token){
         String usuarioid=jwtUtil.getKey(token);
         return usuarioid!=null;
+    }
+
+    private boolean soyAdmin(String token){
+        Boolean admin=jwtUtil.getAdmin(token);
+        return admin;
     }
 }

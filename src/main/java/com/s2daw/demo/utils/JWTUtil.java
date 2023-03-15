@@ -28,7 +28,7 @@ public class JWTUtil {
             .getLogger(JWTUtil.class);
 
 
-    public String create(String id, String subject) {
+    public String create(String id, String subject, Boolean admin) {
 
 
         long nowMillis = System.currentTimeMillis();
@@ -39,6 +39,7 @@ public class JWTUtil {
                     .setIssuedAt(now)
                     .setSubject(subject)
                     .setIssuer(issuer)
+                    .claim("role",admin)
                     .signWith(toKey(key),SignatureAlgorithm.HS256);
 
         if (ttlMillis >= 0) {
@@ -61,6 +62,12 @@ public class JWTUtil {
         Claims claims=obtenerClaims(jwt);
         if (claims==null) return null;
         return claims.getId();
+    }
+
+    public Boolean getAdmin(String jwt) {
+        Claims claims=obtenerClaims(jwt);
+        if (claims==null) return null;
+        return claims.get("role",Boolean.class);
     }
 
     // Clases de apoyo
